@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H&I — Buyer Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pure: '#FFFFFF', rose: '#B76E79', blush: '#F4C2C2', obsidian: '#0A0A0A',
+                    },
+                    fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Manrope', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        .rose-border { border-color: rgba(183,110,121,0.3); }
+        .rose-focus:focus { border-color: #B76E79; box-shadow: 0 0 0 3px rgba(183,110,121,0.18); }
+        .btn-dark { background: #0A0A0A; transition: all .3s; }
+        .btn-dark:hover { background: #B76E79; transform: translateY(-1px); }
+        .btn-rose-ghost { border: 1px solid rgba(183,110,121,0.4); color: #B76E79; transition: all .3s; }
+        .btn-rose-ghost:hover { background: #B76E79; color: #fff; }
+        .tab-btn { color: rgba(255,255,255,0.55); border-bottom: 2px solid transparent; transition: all .3s; }
+        .tab-btn.active, .tab-btn:hover { color: #F4C2C2; border-bottom-color: #B76E79; }
+        .stat-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(183,110,121,0.2); transition: all .3s; }
+        .stat-card:hover { background: rgba(183,110,121,0.08); transform: translateY(-2px); }
+        .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(183,110,121,0.2); }
+        .row-hover:hover { background: rgba(183,110,121,0.08); }
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+            background: #0A0A0A; color: #F4C2C2; padding: .8rem 1.6rem; border-radius: 999px;
+            font-size: .8rem; z-index: 999; opacity: 0; transition: all .4s cubic-bezier(.22,1,.36,1); }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .status-pending { background: rgba(241,196,15,0.15); color: #f1c40f; }
+        .status-confirmed { background: rgba(52,152,219,0.15); color: #7dbef0; }
+        .status-shipped { background: rgba(155,89,182,0.15); color: #b98fd6; }
+        .status-delivered { background: rgba(30,181,58,0.15); color: #5cd976; }
+        .status-cancelled { background: rgba(224,91,91,0.15); color: #e05b5b; }
+        .wish-heart:hover { transform: scale(1.15); }
+    </style>
+</head>
+<body class="bg-obsidian text-white font-sans antialiased min-h-screen">
+
+    <!-- ===================== AUTH GATE ===================== -->
+    <div id="auth-gate" class="min-h-screen flex items-center justify-center px-4 py-10">
+        <div class="w-full max-w-md">
+            <div class="text-center mb-6">
+                <div class="font-serif text-5xl text-blush">H&I</div>
+                <p class="text-[10px] tracking-[0.45em] uppercase text-white/40 mt-1" data-at="buyerCenter">Buyer Center / Kituo cha Mnunuzi</p>
+            </div>
+            <div class="bg-white/5 backdrop-blur-xl border rose-border rounded-3xl p-7">
+                <div class="flex gap-1 mb-6">
+                    <button id="tab-login" class="flex-1 py-2.5 text-xs tracking-[0.25em] uppercase rounded-xl status-confirmed font-semibold" onclick="showAuthTab('login')" data-at="login">Login</button>
+                    <button id="tab-register" class="flex-1 py-2.5 text-xs tracking-[0.25em] uppercase rounded-xl text-white/40 hover:text-white transition" onclick="showAuthTab('register')" data-at="register">Sign Up</button>
+                </div>
+
+                <!-- LOGIN -->
+                <form id="login-form" class="space-y-3">
+                    <p class="text-[10px] tracking-[0.3em] uppercase text-white/40" data-at="lPhone">Phone (e.g. 07XX XXX XXX)</p>
+                    <input id="login-phone" type="tel" placeholder="07XXXXXXXX" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-3 text-sm rose-focus outline-none placeholder:text-white/30">
+                    <input id="login-pass" type="password" placeholder="••••••••" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-3 text-sm rose-focus outline-none placeholder:text-white/30 mt-3">
+                    <button type="submit" class="btn-dark w-full rounded-xl py-3 text-xs tracking-[0.3em] uppercase mt-4" data-at="signIn">Sign In</button>
+                    <p id="login-error" class="hidden text-sm text-red-300 text-center mt-2" data-at="errLogin">Namba au password si sahihi.</p>
+                </form>
+
+                <!-- REGISTER -->
+                <form id="register-form" class="hidden space-y-3">
+                    <input id="reg-name" type="text" placeholder="🪪 Full name" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-3 text-sm rose-focus outline-none placeholder:text-white/30" data-ph-deco>
+                    <input id="reg-phone" type="tel" placeholder="📞 07XXXXXXXX" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-3 text-sm rose-focus outline-none placeholder:text-white/30">
+                    <input id="reg-pass" type="password" placeholder="🔒 Password" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-3 text-sm rose-focus outline-none placeholder:text-white/30">
+                    <input id="reg-pass2" type="password" placeholder="🔒 Confirm password" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-3 text-sm rose-focus outline-none placeholder:text-white/30">
+                    <button type="submit" class="btn-dark w-full rounded-xl py-3 text-xs tracking-[0.3em] uppercase mt-2" data-at="createAccount">Create Account</button>
+                    <p id="register-error" class="hidden text-sm text-red-300 text-center mt-2"></p>
+                </form>
+            </div>
+            <div class="text-center mt-6">
+                <a href="index.html" class="text-xs text-white/40 hover:text-white transition" data-at="backShop">← Back to Shop</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== DASHBOARD ===================== -->
+    <div id="dashboard" class="hidden">
+
+        <!-- Top bar -->
+        <header class="sticky top-0 z-50 backdrop-blur-2xl bg-obsidian/85 border-b rose-border">
+            <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                    <a href="index.html" class="font-serif text-xl text-blush shrink-0">H&I</a>
+                    <span class="hidden md:inline text-[10px] tracking-[0.3em] uppercase text-white/40" data-at="buyerTitle">Buyer Center</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="flex border border-rose/40 rounded-full overflow-hidden">
+                        <button id="ac-lang-sw" class="px-3 py-1.5 text-[10px] tracking-widest transition" onclick="setAccountLang('sw')">SW</button>
+                        <button id="ac-lang-en" class="px-3 py-1.5 text-[10px] tracking-widest transition" onclick="setAccountLang('en')">EN</button>
+                    </div>
+                    <div class="hidden sm:flex items-center gap-2 bg-white/5 border rose-border rounded-full pl-1.5 pr-4 py-1">
+                        <span id="ac-avatar" class="w-7 h-7 rounded-full bg-rose text-white flex items-center justify-center text-xs font-bold">H</span>
+                        <span id="ac-name" class="text-xs text-white/80 max-w-[140px] truncate">Name</span>
+                    </div>
+                    <button onclick="doLogout()" class="rounded-full px-4 py-2 text-[10px] tracking-widest uppercase border rose-border hover:bg-rose/20 transition" data-at="logout">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-6xl mx-auto px-4 py-6">
+            <!-- Greeting -->
+            <div class="mb-6">
+                <h1 id="greeting" class="font-serif text-3xl font-medium text-blush">Karibu, Mteja</h1>
+                <p class="text-white/40 text-xs mt-1" data-at="greetSub">Meneja wa akaunti yako ya HATASH & IYYAH. Kila kitu unachohitaji kiko hapa.</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="stat-card rounded-2xl p-4">
+                    <div class="text-2xl font-serif text-blush" id="st-orders">0</div>
+                    <div class="text-[9px] tracking-[0.3em] uppercase text-white/40" data-at="stOrders">Orders</div>
+                </div>
+                <div class="stat-card rounded-2xl p-4">
+                    <div class="text-2xl font-serif text-blush" id="st-spent">Tsh 0</div>
+                    <div class="text-[9px] tracking-[0.3em] uppercase text-white/40" data-at="stSpent">Total Spent</div>
+                </div>
+                <div class="stat-card rounded-2xl p-4">
+                    <div class="text-2xl font-serif text-blush" id="st-saved">0</div>
+                    <div class="text-[9px] tracking-[0.3em] uppercase text-white/40" data-at="stSaved">Saved Items</div>
+                </div>
+                <div class="stat-card rounded-2xl p-4">
+                    <div class="text-2xl font-serif text-blush" id="st-addrs">0</div>
+                    <div class="text-[9px] tracking-[0.3em] uppercase text-white/40" data-at="stAddresses">Addresses</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex gap-6 overflow-x-auto pb-2 mb-6 text-xs tracking-[0.2em] uppercase">
+                <button class="tab-btn active whitespace-nowrap" onclick="showTab('overview')" data-at="tabOverview">Overview</button>
+                <button class="tab-btn whitespace-nowrap" onclick="showTab('orders')" data-at="tabOrders">My Orders</button>
+                <button class="tab-btn whitespace-nowrap" onclick="showTab('saved')" data-at="tabSaved">Saved Items</button>
+                <button class="tab-btn whitespace-nowrap" onclick="showTab('addresses')" data-at="tabAddresses">Address Book</button>
+                <button class="tab-btn whitespace-nowrap" onclick="showTab('profile')" data-at="tabProfile">Profile</button>
+            </div>
+
+            <!-- ===== OVERVIEW ===== -->
+            <section id="sec-overview" class="space-y-5">
+                <div class="card rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h2 class="font-serif text-2xl text-white" data-at="ovWelcome">Chagua na Ununue kwa Utulivu.</h2>
+                        <p class="text-white/45 text-sm mt-1" data-at="ovText">Tembelea duka letu, ongeza bidhaa kwenye kikapu, na ukimaliza agizo litapelekwa kwa WhatsApp kwa malipo ya haraka.</p>
+                    </div>
+                    <a href="index.html" class="btn-dark rounded-full px-6 py-3 text-[11px] tracking-[0.25em] uppercase no-underline" data-at="ovShop">Shop Now</a>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xs tracking-[0.25em] uppercase text-white/60" data-at="recentOrders">Recent Orders</h3>
+                        <button class="text-xs text-rose hover:text-blush transition" onclick="showTab('orders')" data-at="viewAll">View all →</button>
+                    </div>
+                    <div id="ov-orders" class="space-y-3"></div>
+                </div>
+            </section>
+
+            <!-- ===== ORDERS ===== -->
+            <section id="sec-orders" class="hidden space-y-4">
+                <h2 class="text-xs tracking-[0.25em] uppercase text-white/60" data-at="ordersTitle">My Orders</h2>
+                <div id="orders-list" class="space-y-3"></div>
+                <!-- order detail subview -->
+                <div id="order-detail" class="hidden card rounded-2xl p-6"></div>
+            </section>
+
+            <!-- ===== SAVED ===== -->
+            <section id="sec-saved" class="hidden">
+                <h2 class="text-xs tracking-[0.25em] uppercase text-white/60 mb-4" data-at="savedTitle">Saved Items</h2>
+                <div id="saved-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+            </section>
+
+            <!-- ===== ADDRESSES ===== -->
+            <section id="sec-addresses" class="hidden">
+                <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                    <h2 class="text-xs tracking-[0.25em] uppercase text-white/60" data-at="addrTitle">Address Book</h2>
+                    <button onclick="openAddressForm()" class="btn-dark rounded-full px-5 py-2 text-[10px] tracking-[0.25em] uppercase" data-at="addAddress">+ Add Address</button>
+                </div>
+                <div id="addr-list" class="grid md:grid-cols-2 gap-4"></div>
+                <div id="addr-form" class="hidden card rounded-2xl p-6 mt-4 max-w-lg">
+                    <h3 class="font-serif text-xl text-blush mb-5" data-at="addrFormTitle">Delivery Address</h3>
+                    <div class="space-y-3">
+                        <input id="a-name" type="text" placeholder="Full name / recipient" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-2.5 text-sm rose-focus outline-none placeholder:text-white/30">
+                        <select id="a-region" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-2.5 text-sm rose-focus outline-none text-white/80">
+                            <option value="" class="text-black" data-ph>Region (Mkoa)</option>
+                        </select>
+                        <input id="a-city" type="text" placeholder="City / area (Jiji/Mtaa)" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-2.5 text-sm rose-focus outline-none placeholder:text-white/30">
+                        <input id="a-street" type="text" placeholder="Street / details" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-2.5 text-sm rose-focus outline-none placeholder:text-white/30">
+                        <input id="a-phone" type="tel" placeholder="07XXXXXXXX" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-2.5 text-sm rose-focus outline-none placeholder:text-white/30">
+                    </div>
+                    <div class="flex gap-3 mt-5">
+                        <button onclick="saveAddress()" class="btn-dark rounded-full px-6 py-2.5 text-[10px] tracking-[0.25em] uppercase" data-at="save">Save</button>
+                        <button onclick="closeAddressForm()" class="rounded-full px-5 py-2.5 text-[10px] tracking-widest uppercase border rose-border hover:bg-rose/20 transition" data-at="cancel">Cancel</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== PROFILE ===== -->
+            <section id="sec-profile" class="hidden max-w-xl space-y-5">
+                <h2 class="text-xs tracking-[0.25em] uppercase text-white/60" data-at="profileTitle">Profile & Settings</h2>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-sm text-white/80 font-medium mb-4" data-at="infoTitle">Account Information</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-[10px] tracking-[0.3em] uppercase text-white/40" data-at="fullName">Full Name</label>
+                            <input id="p-name" type="text" class="mt-1 w-full bg-white/10 border rose-border rounded-xl px-4 py-2.5 text-sm rose-focus outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[10px] tracking-[0.3em] uppercase text-white/40" data-at="phone">Phone Number</label>
+                            <input id="p-phone" type="tel" readonly class="mt-1 w-full bg-white/5 border rose-border rounded-xl px-4 py-2.5 text-sm outline-none text-white/50 cursor-not-allowed">
+                        </div>
+                        <div>
+                            <label class="text-[10px] tracking-[0.3em] uppercase text-white/40" data-at="memberSince">Joined</label>
+                            <div id="p-since" class="mt-1 text-sm text-white/70"></div>
+                        </div>
+                        <button onclick="saveProfile()" class="btn-dark rounded-full px-6 py-2.5 text-[10px] tracking-[0.25em] uppercase" data-at="saveChanges">Save Changes</button>
+                    </div>
+                </div>
+
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-sm text-white/80 font-medium mb-4" data-at="passTitle">Change Password</h3>
+                    <div class="space-y-3">
+                        <input id="p-oldpass" type="password" placeholder="Current password" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-2.5 text-sm rose-focus outline-none placeholder:text-white/30">
+                        <input id="p-newpass" type="password" placeholder="New password" class="w-full bg-white/10 border rose-border rounded-xl px-4 py-2.5 text-sm rose-focus outline-none placeholder:text-white/30">
+                        <button onclick="changePassword()" class="btn-rose-ghost rounded-full px-6 py-2.5 text-[10px] tracking-[0.25em] uppercase" data-at="updatePass">Update Password</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/account.js"></script>
+</body>
+</html>
