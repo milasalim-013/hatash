@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HATASH &amp; IYYAH COLLECTION — Private Luxury Flagship</title>
+    <meta name="description" content="An ultra-luxury invite-only digital flagship experience from Tanzania. Private Client Concierge, Bespoke Configurator, VIP Vault.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pure: '#FFFFFF',
+                        rose: '#B76E79',
+                        blush: '#F4C2C2',
+                        obsidian: '#0A0A0A',
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Manrope', 'sans-serif'],
+                    },
+                    backdropBlur: {
+                        lg: '24px',
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-pure text-obsidian font-sans antialiased overflow-x-hidden">
+
+    <!-- ===================== PRELOADER ===================== -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-inner">
+            <div class="preloader-logo">H&I</div>
+            <div class="preloader-line"><span></span></div>
+            <p class="preloader-text" id="preloader-text">HATASH &amp; IYYAH</p>
+        </div>
+    </div>
+
+    <!-- ===================== CURSOR ===================== -->
+    <div id="cursor-dot" class="cursor-dot"></div>
+    <div id="cursor-ring" class="cursor-ring"></div>
+
+    <!-- ===================== NAVBAR ===================== -->
+    <nav id="navbar" class="nav-dock">
+        <div class="nav-left">
+            <a href="#home" class="brand">H&I <span class="brand-sub">COLLECTION</span></a>
+        </div>
+        <div class="nav-links">
+            <a href="#collections" class="nav-link">Collections</a>
+            <a href="#configurator" class="nav-link">Atelier</a>
+            <a href="#vault" class="nav-link nav-link-gold">Private Suite</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+        <div class="nav-right">
+            <button class="nav-icon" id="search-toggle" aria-label="Search">⌕</button>
+            <div class="lang-toggle">
+                <button id="lang-sw" class="lang-btn" onclick="setLang('sw')">SW</button>
+                <button id="lang-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+            </div>
+            <div class="currency-switcher" id="currency-switcher">
+                <span class="currency-label">
+                    <span id="currency-current">TZS</span>
+                </span>
+                <div class="currency-menu hidden">
+                    <button data-cur="TZS">TZS — Tanzania Shilling</button>
+                    <button data-cur="USD">USD</button>
+                    <button data-cur="EUR">EUR</button>
+                    <button data-cur="BTC">BTC</button>
+                    <button data-cur="ETH">ETH</button>
+                </div>
+            </div>
+            <button class="nav-icon cart-btn" id="cart-toggle" aria-label="Cart">
+                <span class="bag-icon">🛍</span>
+                <span id="cart-count" class="cart-badge">0</span>
+            </button>
+            <a href="account.html" class="nav-icon account-link" aria-label="My Account" title="My Account">
+                <span class="bag-icon">👤</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- SEARCH OVERLAY -->
+    <div id="search-overlay" class="overlay hidden">
+        <div class="overlay-panel">
+            <button class="overlay-close" id="search-close">✕</button>
+            <h3 class="overlay-title-serif">Search the Collection</h3>
+            <input type="text" id="search-input" placeholder="Vitenge, Kanga, Kanzu, Coffee..." class="search-input">
+            <div id="search-results" class="search-results"></div>
+        </div>
+    </div>
+
+    <!-- ===================== HERO ===================== -->
+    <section id="home" class="hero">
+        <div class="hero-bg" id="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-eyebrow" data-lang="heroEyebrow">A Private Tanzanian Maison</div>
+            <h1 class="hero-title serif" data-lang="heroTitle">HATASH &amp; IYYAH</h1>
+            <p class="hero-sub" data-lang="heroSub">Bespoke collections, crafted for the discerning. By invitation only.</p>
+            <a href="#collections" class="btn-magnetic" data-lang="heroCta">
+                <span>Enter the Maison</span>
+            </a>
+            <div class="hero-scroll">scroll <span class="scroll-line"></span></div>
+        </div>
+    </section>
+
+    <!-- ===================== MARQUEE ===================== -->
+    <div class="marquee">
+        <div class="marquee-track">
+            <span>VITENGE</span><span>•</span><span>KANGA</span><span>•</span><span>KANZU</span><span>•</span><span>KAHAA</span><span>•</span><span>SHANGA</span><span>•</span><span>TINGA TINGA</span><span>•</span>
+            <span>VITENGE</span><span>•</span><span>KANGA</span><span>•</span><span>KANZU</span><span>•</span><span>KAHAA</span><span>•</span><span>SHANGA</span><span>•</span><span>TINGA TINGA</span><span>•</span>
+        </div>
+    </div>
+
+    <!-- ===================== COLLECTIONS ===================== -->
+    <section id="collections" class="collections">
+        <div class="section-head">
+            <div class="section-eyebrow" data-lang="collEyebrow">Signature Collections</div>
+            <h2 class="section-title serif" data-lang="collTitle">The Collection</h2>
+            <p class="section-sub" data-lang="collSub">Each piece, a celebration of Tanzanian craftsmanship.</p>
+        </div>
+        <div id="product-grid" class="product-stage"></div>
+    </section>
+
+    <!-- ===================== 3D VISUALIZER ===================== -->
+    <section id="visualizer" class="visualizer">
+        <div class="section-head">
+            <div class="section-eyebrow" data-lang="vizEyebrow">Spatial Atelier</div>
+            <h2 class="section-title serif" data-lang="vizTitle">360° Inspection</h2>
+        </div>
+        <div id="three-stage" class="three-stage">
+            <div class="three-placeholder">
+                <div class="three-spinner"></div>
+                <p class="three-hint" data-lang="vizHint">Interactive 3D inspection — drag to rotate</p>
+                <canvas id="webgl-canvas" class="webgl-canvas hidden"></canvas>
+            </div>
+            <div class="viz-thumbs">
+                <button class="viz-thumb active" data-viz="0">Kitenge</button>
+                <button class="viz-thumb" data-viz="1">Kanga</button>
+                <button class="viz-thumb" data-viz="2">Kanzu</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== CONFIGURATOR ===================== -->
+    <section id="configurator" class="configurator">
+        <div class="section-head">
+            <div class="section-eyebrow" data-lang="cfgEyebrow">Bespoke Atelier</div>
+            <h2 class="section-title serif" data-lang="cfgTitle">Configure Your Piece</h2>
+            <p class="section-sub" data-lang="cfgSub">Materials, engravings, and gift presentation — tailored to you.</p>
+        </div>
+        <div class="cfg-grid">
+            <div class="cfg-preview" id="cfg-preview">
+                <div class="cfg-preview-emoji" id="cfg-emoji">👜</div>
+                <div class="cfg-preview-name" id="cfg-name">Leather Handbag</div>
+                <div class="cfg-preview-price" id="cfg-price">—</div>
+            </div>
+            <div class="cfg-controls">
+                <div class="cfg-group">
+                    <label class="cfg-label" data-vizlabel="Mat">Material</label>
+                    <div class="cfg-options" id="cfg-material">
+                        <button data-mat="Leather">Leather</button>
+                        <button data-mat="Vitenge">Vitenge</button>
+                        <button data-mat="Beaded">Beaded</button>
+                    </div>
+                </div>
+                <div class="cfg-group">
+                    <label class="cfg-label" data-lang="cfglabel2">Custom Engraving</label>
+                    <input type="text" id="cfg-engrave" class="cfg-input" maxlength="20" placeholder="e.g. HATASH">
+                </div>
+                <div class="cfg-group">
+                    <label class="cfg-label" data-lang="cfglabel3">Gift Wrapping</label>
+                    <div class="cfg-options" id="cfg-wrap">
+                        <button data-wrap="Standard" class="active">Standard</button>
+                        <button data-wrap="Rose Gold">Rose Gold</button>
+                        <button data-wrap="Obsidian">Obsidian</button>
+                    </div>
+                </div>
+                <div class="cfg-total">
+                    <span data-lang="cfgTotal">Total</span>
+                    <strong id="cfg-total-value">—</strong>
+                </div>
+                <button class="btn-magnetic cfg-checkout" onclick="cfgCheckout()">
+                    <span data-lang="cfgCta">Order This Piece</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== VIP VAULT ===================== -->
+    <section id="vault" class="vault">
+        <div class="vault-inner">
+            <div class="vault-lock">◆</div>
+            <h2 class="vault-title serif" data-lang="vaultTitle">The Private Suite</h2>
+            <p class="vault-sub" data-lang="vaultSub">Unreleased &amp; High-Jewelry Collections. Access by invitation only.</p>
+            <button class="btn-magnetic vault-trigger" onclick="openVault()">
+                <span data-lang="vaultCta">Request Access</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- VAULT PASSCODE OVERLAY -->
+    <div id="vault-overlay" class="overlay hidden">
+        <div class="overlay-panel vault-panel">
+            <button class="overlay-close" onclick="closeVault()">✕</button>
+            <div class="vault-lock">◆</div>
+            <h3 class="overlay-title-serif" data-lang="vaultPrompt">Enter Private Access Code</h3>
+            <input type="password" id="vault-pass" class="search-input" placeholder="••••••" maxlength="12">
+            <button class="btn-magnetic" onclick="submitVault()"><span data-lang="vaultEnter">Enter</span></button>
+            <p class="vault-error hidden" id="vault-error" data-lang="vaultErr">Invalid code. Access denied.</p>
+        </div>
+    </div>
+
+    <!-- ===================== CART ===================== -->
+    <div id="cart-overlay" class="overlay hidden">
+        <div class="overlay-panel cart-panel">
+            <button class="overlay-close" onclick="toggleCart()">✕</button>
+            <h3 class="overlay-title-serif" data-lang="cartTitle">Your Selection</h3>
+            <div id="cart-items" class="cart-items"></div>
+            <div class="cart-total-row">
+                <span data-lang="cartTotal">Total</span>
+                <strong id="cart-total">—</strong>
+            </div>
+            <button class="btn-magnetic cart-checkout" onclick="checkoutNow()">
+                <span data-lang="cartCta">Checkout — Private Concierge</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ===================== CHECKOUT ===================== -->
+    <div id="checkout-overlay" class="overlay hidden">
+        <div class="overlay-panel checkout-panel">
+            <button class="overlay-close" onclick="closeCheckout()">✕</button>
+            <h3 class="overlay-title-serif" data-lang="coTitle">Secure Checkout</h3>
+            <div class="secure-badges">
+                <span>🔒 256-bit Encrypted</span><span>💳 Apple Pay</span><span>₿ Crypto</span>
+            </div>
+            <div id="co-items" class="co-items"></div>
+            <div class="co-total">
+                <span data-lang="coTotal">Total</span>
+                <strong id="co-total">—</strong>
+            </div>
+            <textarea id="co-message" class="cfg-input" rows="2" placeholder="Gift message to recipient..."></textarea>
+            <button class="btn-magnetic co-go" onclick="sendOrder()">
+                <span data-lang="coCta">Confirm via Concierge (WhatsApp)</span>
+            </button>
+            <p class="co-note" data-lang="coNote">Your order is relayed to our Private Concierge at 0628 827 777 to arrange payment.</p>
+        </div>
+    </div>
+
+    <!-- ===================== AI CONCIERGE ===================== -->
+    <button id="concierge-fab" class="concierge-fab" onclick="toggleConcierge()">
+        <span class="fab-pulse"></span>
+        <span class="fab-icon">✦</span>
+    </button>
+    <div id="concierge" class="concierge hidden">
+        <div class="concierge-head">
+            <div class="concierge-avatar">H&I</div>
+            <div>
+                <div class="concierge-name" data-lang="conName">Private Shopping Assistant</div>
+                <div class="concierge-status" data-lang="conStatus">Online · Discreet</div>
+            </div>
+            <button class="concierge-close" onclick="toggleConcierge()">✕</button>
+        </div>
+        <div class="concierge-body" id="concierge-body">
+            <div class="chat-msg bot" data-lang="conWelcome">Welcome. How may I assist your acquisition, Madam/Sir?</div>
+        </div>
+        <div class="concierge-input-row">
+            <input type="text" id="concierge-input" placeholder="Ask for a recommendation..." class="cfg-input">
+            <button class="con-cierce-send" id="concierge-send" onclick="sendChat()">➤</button>
+        </div>
+    </div>
+
+    <!-- ===================== ABOUT / CONTACT ===================== -->
+    <section id="about" class="about">
+        <div class="section-head">
+            <div class="section-eyebrow" data-lang="aboutEyebrow">The Maison</div>
+            <h2 class="section-title serif" data-lang="aboutTitle">Crafted in Tanzania, Worn Worldwide</h2>
+            <p class="about-text" data-lang="aboutText">HATASH AND IYYAH COLLECTION is a private Tanzanian maison dedicated to artisanal excellence, discretion, and the celebration of African heritage.</p>
+        </div>
+    </section>
+
+    <footer id="contact" class="footer">
+        <div class="footer-brand">HATASH &amp; IYYAH COLLECTION</div>
+        <p class="footer-contact" data-lang="footContact">Private Concierge · <strong>0628 827 777</strong></p>
+        <a class="footer-wa btn-magnetic" href="https://wa.me/255628827777" target="_blank"><span>💬 Connect on WhatsApp</span></a>
+        <p class="footer-copy" data-lang="footCopy">© 2026 HATASH AND IYYAH COLLECTION · Tanzania · All rights reserved</p>
+        <a href="admin.html" class="footer-admin" title="Administrator">⚙ Admin</a>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/three.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
